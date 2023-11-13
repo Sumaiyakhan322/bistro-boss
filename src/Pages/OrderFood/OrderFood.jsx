@@ -7,9 +7,14 @@ import { useState } from 'react';
 
 import useLoad from '../../Hooks/useLoad';
 import OrdterTabs from './OrdterTabs';
+import { useParams } from 'react-router-dom';
 const OrderFood = () => {
-    const [tabIndex,setTabIndex]=useState(0)
+    const categories=['salad','pizza','soup','dessert','drinks'];
+    const {category}=useParams()
+    const indexOfCategory=categories.indexOf(category)
+    const [tabIndex,setTabIndex]=useState(indexOfCategory)
     const [menu]=useLoad()
+    
     const desserts=menu.filter(item=>item.category==='dessert')
     const soup=menu.filter(item=>item.category==='soup')
     const pizza=menu.filter(item=>item.category==='pizza')
