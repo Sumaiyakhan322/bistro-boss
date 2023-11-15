@@ -19,7 +19,7 @@ const OrdterTabs = ({cardItems}) => {
     }
     return (
         <div>
-              <div >
+              <div className="my-20 ">
  
     <Swiper
         pagination={pagination}
