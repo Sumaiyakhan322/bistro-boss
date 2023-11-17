@@ -8,6 +8,10 @@ import Menu from "../Pages/Menu/Menu";
 import OrderFood from "../Pages/OrderFood/OrderFood";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
+import Dashboard from "../Layouts/Dashboard";
+import Cart from "../Pages/Dashborad/Cart/Cart";
+import Private from "./Private";
+import AllUsers from "../Pages/Dashborad/Cart/Allusers";
   
 export  const router = createBrowserRouter([
     {
@@ -31,5 +35,19 @@ export  const router = createBrowserRouter([
         element:<Register></Register>
       }
     ]
-    },
+    },{
+      path:'dashboard',
+      element:<Private><Dashboard></Dashboard></Private>,
+      children:[
+        {
+          path:'cart',
+          element:<Cart></Cart>
+        },
+        //admin routes
+        {
+          path:'allUsers',
+          element:<AllUsers></AllUsers>
+        }
+      ]
+    }
   ]);

@@ -4,9 +4,11 @@ import { AuthContext } from "../../Providers/AuthProvider";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 import { updateProfile } from "firebase/auth";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import SocailLogin from "../../Shared/SocailLogin";
 
 const Register = () => {
-
+     const axiosPublic=useAxiosPublic()
     const {createUser}=useContext(AuthContext)
     const [error, setError] = useState("");
     const [seePass,setSeepass]=useState(true);
@@ -36,22 +38,26 @@ const Register = () => {
             })
               .then()
               .catch()
-            Swal.fire({
-              position: "center",
-              icon: "success",
-    
-              title: "Successfully register by email and password ",
-    
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            console.log(result);
+              const userInfo={name,email}
+              axiosPublic.post('/users',userInfo)
+            .then(res=>{
+              if(res.data.insertedId){
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Successfully register by email and password ",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                
             e.target.reset();
             navigate("/");
+              }
+            })
+          
+            
           })
-          .catch((error) => {
-            console.log(error);
-          });
+            .catch()
       };
        
         
@@ -97,10 +103,11 @@ const Register = () => {
               </div>
               
               <div className="form-control mt-6 ">
-               <input type="submit" className=' btn btn-primary'  value={'Login'} />
+               <input type="submit" className=' btn btn-primary'  value={'Register'} />
               </div>
             </form>
            <p className='text-center my-8'>have already account <Link to='/login'>Log in</Link> </p>
+           <SocailLogin></SocailLogin>
           </div>
         </div>
       </div>

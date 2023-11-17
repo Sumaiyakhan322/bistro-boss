@@ -4,6 +4,7 @@ import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-s
 import { AuthContext } from '../../Providers/AuthProvider';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import SocailLogin from '../../Shared/SocailLogin';
 
 const Login = () => {
 
@@ -83,9 +84,12 @@ const location=useLocation()
               </div>
             </form>
            <p className='text-center my-8'>New here goto <Link to='/register'>Register</Link> </p>
+           <SocailLogin></SocailLogin>
           </div>
         </div>
+      
       </div>
+      
       </>
     );
 };
