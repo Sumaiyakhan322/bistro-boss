@@ -45,7 +45,7 @@ const Dashboard = () => {
             </NavLink>
           </li>
          </> :
-        //  Admin doesnot exits
+        //  Admin does not exits
          <>
 
          <li>

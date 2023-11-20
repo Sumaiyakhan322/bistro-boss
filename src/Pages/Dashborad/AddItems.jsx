@@ -1,12 +1,49 @@
 import { useForm } from "react-hook-form";
 import Title from "../../Shared/Title";
 import { FaUtensilSpoon } from "react-icons/fa";
-const image_hosting=import.meta.env.VITE_IMGBB_API;
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+const image_hosting = import.meta.env.VITE_IMGBB_API;
+const image_hosing_Api = `https://api.imgbb.com/1/upload?key=${image_hosting}`;
 
 const AddItems = () => {
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  const { register, handleSubmit, reset } = useForm();
+  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
+  const onSubmit = async (data) => {
+    // console.log(data);
+    const imgFile = { image: data.image[0] };
+    //upload the img to imgbb and get an url
+    const res = await axiosPublic.post(image_hosing_Api, imgFile, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (res.data.success) {
+      const MenuItem = {
+        name: data.name,
+        category: data.category,
+        price: parseFloat(data.price),
+        recipe: data.recipe,
+        image: res.data.data.display_url,
+      };
+      // Now post the menu item to backend
+      const menuRes = await axiosSecure.post("/menu", MenuItem);
+      // console.log(menuRes.data);
+      reset();
+      if (menuRes.data.insertedId) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Added a new item",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      // console.log(MenuItem);
+    }
+    // console.log(res.data.data.display_url);
   };
   return (
     <div>
@@ -34,9 +71,10 @@ const AddItems = () => {
             </label>
             <select
               {...register("category")}
-              className="select select-bordered " defaultValue={'default'}
+              className="select select-bordered "
+              defaultValue={"default"}
             >
-              <option value={'default'} disabled>
+              <option value={"default"} disabled>
                 Choose a category
               </option>
               <option value="salad">Salad</option>
@@ -76,13 +114,15 @@ const AddItems = () => {
 
         <div className="form-control my-6">
           <input
-           {...register("image")}
+            {...register("image")}
             type="file"
             className="file-input file-input-bordered w-full max-w-xs"
           />
         </div>
 
-        <button className="btn">AddItems <FaUtensilSpoon></FaUtensilSpoon></button>
+        <button className="btn">
+          AddItems <FaUtensilSpoon></FaUtensilSpoon>
+        </button>
       </form>
     </div>
   );
